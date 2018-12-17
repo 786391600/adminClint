@@ -44,6 +44,24 @@ export const otherRouter = {
       name: 'home',
       title: '首页',
       component: () => import('src/pages/home/home')
+    },
+    {
+      path: 'commodity',
+      name: 'commodity',
+      meta: {
+        title: '商品管理',
+        requireAuth: true
+      },
+      component: () => import('src/pages/commodity/commodity')
+    },
+    {
+      path: 'order',
+      name: 'Order',
+      meta: {
+        title: '订单管理',
+        requireAuth: true
+      },
+      component: () => import('src/pages/order/order')
     }
   ]
 };

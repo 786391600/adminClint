@@ -2,7 +2,7 @@
   <div class="login">
     <div class="middle-wrapper">
       <div class="title-wrapper">
-        <div class="title">VUE-ADMIN 后台管理系统</div>
+        <div class="title">意点科技 后台管理系统</div>
       </div>
       <div class="login-form">
         <el-form
@@ -53,7 +53,7 @@
 </template>
 <script>
   import validateCode from 'src/components/ValidateCode/index';
-
+  import http from 'src/http'; 
   export default {
     created () {
     },
@@ -114,11 +114,11 @@
          *  将请求返回的Token对象存到store中
          *  @Token  token对象
         */
-
-        let token = 'a94756da-2962-40ae-bdea-787fd02c9d92';
-
-        this.$store.commit('SET_TOKEN', token);
-        this.$router.replace('home');
+        http.sendPost({action: 'login', data: {user: this.form.username, pass: this.form.password}}).then((response) => {
+          let token = response.sessionId;
+          this.$store.commit('SET_TOKEN', token);
+          this.$router.replace('home');
+        });
       }
     },
     components: {

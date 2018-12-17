@@ -1,10 +1,4 @@
-<%--
-@Project Name: vue-admin
-@Author: luichooy
-@Date: 2017-11-16 12:27
-@Email: luichooy@163.com
-@Idea: WebStorm
---%>
+
 
 <template>
   <div class='basic'>
@@ -67,7 +61,6 @@
 <script>
   import {formatDate} from 'src/utils/utils';
   import score from 'src/components/Score/index';
-
   const POSITIVE = 0;
   const NEGATIVE = 1;
   export default {

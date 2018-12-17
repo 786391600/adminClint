@@ -48,7 +48,6 @@ http.interceptors.request.use(config => {
       console.log(config.data);
     }
   }
-  
   return config;
 }, error => {
   loadingInstance.close();
@@ -76,6 +75,7 @@ http.interceptors.response.use(res => {
           showClose: false,
           type: 'error',
           callback: action => {
+            store.commit('SET_TOKEN', '')
             router.replace({
               path: '/login',
               query: {
@@ -106,4 +106,24 @@ http.interceptors.response.use(res => {
   }
 });
 
-export default http;
+function sendPost (data) {
+  if (store.state.token) {
+    data.sessionId = store.state.token
+  }
+  return new Promise((resolve, reject) => {
+    http.post('/adminAction', data).then((response) => {
+      if (response.success) {
+        resolve(response)
+      } else {
+        Message.error({
+          message: '错误:' + JSON.stringify(response)
+        });
+      }
+    })
+  })
+}
+
+export default {
+  sendPost: sendPost,
+  get: http.get
+};

@@ -33,7 +33,29 @@ const tableData = require('../src/data/tables/tables');
 const formData = require('../src/data/form/form');
 
 var apiRoutes = express.Router();
-
+//线上
+// var options = {
+//         target: 'https://www.beijixiong.club', // target host
+//         // target: 'http://121.40.142.196:9003/', // target host
+//         changeOrigin: true,
+//         pathRewrite: {
+//             '^/api/adminAction' : '/api/adminAction',     // 重写请求，比如我们源访问的是api/old-path，那么请求会被解析为/api/new-path
+//             '^/api/fileUpload' : '/fileUpload'           // 同上
+//         }
+//     }
+//测试
+var options = {
+        target: 'http://127.0.0.1:18080', // target host
+        // target: 'http://121.40.142.196:9003/', // target host
+        changeOrigin: true,
+        pathRewrite: {
+            '^/api/adminAction' : '/adminAction',     // 重写请求，比如我们源访问的是api/old-path，那么请求会被解析为/api/new-path
+            '^/api/fileUpload' : '/fileUpload'           // 同上
+        }
+    }
+var exampleProxy = proxyMiddleware(options);
+apiRoutes.use('/adminAction', exampleProxy)
+apiRoutes.use('/fileUpload', exampleProxy)
 apiRoutes.get('/addressData', function (req, res) {
   res.json({
     errno: 0,

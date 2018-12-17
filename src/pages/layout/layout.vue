@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="siderbar-wrapper" :style="{width: this.isCollapsed?'64px':'200px'}">
       <div class="logo-wrapper">
-        logo
+        意点
       </div>
       <el-menu
         background-color="#424f63"
@@ -85,6 +85,16 @@
             icon: 'el-icon-adm-home'
           },
           {
+            path: '/commodity',
+            title: '商品管理',
+            icon: 'el-icon-adm-formsetup'
+          },
+          {
+            path: '/order',
+            title: '订单管理',
+            icon: 'el-icon-adm-log'
+          },
+          {
             path: '/tables',
             title: '表格管理',
             icon: 'el-icon-adm-linechart',
@@ -160,13 +170,12 @@
         let User = {
           id: '7f859967-9b12-441c-badc-8a7d312f6da4',
           username: 'admin',
-          name: 'luichooy',
+          name: 'wangtao',
           type: {
             code: 0,
             name: '超级管理员'
           }
         };
-        
         this.$store.commit('SET_USER', User);
       },
       handleCommand(command) {
@@ -195,14 +204,12 @@
 </script>
 <style lang="scss">
   @import '../../assets/styles/variable';
-  
   .siderbar-wrapper {
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     width: $siderbarWidth;
-    z-index: 11;
     background-color: $siderbarBackgroundColor;
     transition: all 0.3s ease-in-out;
     

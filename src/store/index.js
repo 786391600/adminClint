@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import state from './state';
 import mutations from './mutations';
+import actions from './action';
 import * as getters from './getters';
 import createLogger from 'vuex/dist/logger';
 
@@ -13,5 +14,6 @@ export default new Vuex.Store({
   mutations,
   getters,
   strict: debug,
-  plugins: debug ? [createLogger()] : []
+  plugins: debug ? [createLogger()] : [],
+  actions
 });
