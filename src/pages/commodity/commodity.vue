@@ -54,7 +54,7 @@
           <el-input v-model="form.name" type = 'name' autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="添加图片" :label-width="formLabelWidth" prop="imgUrl" required
-          
+
         >
           <uploadFile @uploadSuccess='uploadSuccess' :preView = 'form.imgUrl'></uploadFile>
         </el-form-item>
@@ -138,7 +138,7 @@
         }
       },
       uploadSuccess (response) {
-        this.form.imgUrl = response.url
+        this.form.imgUrl = response.url;
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {

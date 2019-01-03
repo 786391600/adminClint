@@ -54,6 +54,14 @@ var options = {
         }
     }
 var exampleProxy = proxyMiddleware(options);
+var uploadProxy = proxyMiddleware({
+  target: 'http://117.78.45.173:4869',
+  changeOrigin: true,
+        pathRewrite: {
+           '^/api/upload' : '/upload'           // 同上
+        }
+})
+apiRoutes.use('/upload', uploadProxy)
 apiRoutes.use('/adminAction', exampleProxy)
 apiRoutes.use('/fileUpload', exampleProxy)
 apiRoutes.get('/addressData', function (req, res) {
@@ -88,11 +96,11 @@ apiRoutes.get('/getTableData', function (req, res) {
   let query = req.query;
   let per_page = query.per_page;
   let cur_page = query.cur_page;
-  
+
   let min = per_page * cur_page - per_page;
   let max = per_page * cur_page;
-  
-  
+
+
   let arr = tableData.slice(min, max);
   res.json({
     errno: 0,
