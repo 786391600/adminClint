@@ -95,6 +95,11 @@
             icon: 'el-icon-adm-log'
           },
           {
+            path: '/activity',
+            title: '活动管理',
+            icon: 'el-icon-adm-formsetup'
+          },
+          {
             path: '/tables',
             title: '表格管理',
             icon: 'el-icon-adm-linechart',

@@ -62,6 +62,15 @@ export const otherRouter = {
         requireAuth: true
       },
       component: () => import('src/pages/order/order')
+    },
+    {
+      path: 'activity',
+      name: 'activity',
+      meta: {
+        title: '活动管理',
+        requireAuth: true
+      },
+      component: () => import('src/pages/activity/index')
     }
   ]
 };

@@ -11,6 +11,9 @@ const actions = {
   },
   getOrderList (context, data) {
     return http.sendPost({action: 'order.getOrderList', data: data})
+  },
+  removeImage(context, data) {
+    return http.sendPost({action: 'commodity.removeImage', data: data})
   }
 };
 
