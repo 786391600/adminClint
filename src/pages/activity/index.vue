@@ -58,10 +58,10 @@
         >
           <uploadFile @uploadSuccess='uploadSuccess' :preView = 'form.imgUrl'></uploadFile>
         </el-form-item>
-        <el-form-item label="商品价格" :label-width="formLabelWidth"
-        prop='price'
+        <el-form-item label="活动描述" :label-width="formLabelWidth"
+        prop='describe'
         >
-          <el-input type="price" v-model.number="form.price" autocomplete="off"></el-input>
+          <el-input type="textarea" v-model="form.describe" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -93,7 +93,8 @@
         form: {
           name: '',
           price: '',
-          imgUrl: ''
+          imgUrl: '',
+          describe: ''
         },
         formRules: {
           name: [
@@ -105,6 +106,9 @@
           price: [
             {required: true, message: '价格必填'},
             {type: 'number', message: '价格必须为数字值'}
+          ],
+          describe: [
+            {required: true, message: '活动描述必填', trigger: 'change'}
           ]
         },
         formLabelWidth: '120px'
