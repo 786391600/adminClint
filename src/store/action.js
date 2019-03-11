@@ -14,6 +14,24 @@ const actions = {
   },
   removeImage(context, data) {
     return http.sendPost({action: 'commodity.removeImage', data: data})
+  },
+  addActivity (context, data) {
+    return http.sendPost({action: 'activity.addActivity', data: data})
+  },
+  getActivityList (context, data) {
+    return http.sendPost({action: 'activity.getActivityList', data: data})
+  },
+  removeActivity (context, data) {
+    return http.sendPost({action: 'activity.removeActivity', data: data})
+  },
+  addMerchants (context, data) {
+    return http.sendPost({action: 'merchants.addMerchants', data: data})
+  },
+  getMerchantsList (context, data) {
+    return http.sendPost({action: 'merchants.getMerchantsList', data: data})
+  },
+  removeMerchants (context, data) {
+    return http.sendPost({action: 'merchants.removeMerchants', data: data})
   }
 };
 

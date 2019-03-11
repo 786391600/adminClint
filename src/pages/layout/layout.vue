@@ -100,6 +100,11 @@
             icon: 'el-icon-adm-formsetup'
           },
           {
+            path: '/merchants',
+            title: '商家管理',
+            icon: 'el-icon-adm-formsetup'
+          },
+          {
             path: '/tables',
             title: '表格管理',
             icon: 'el-icon-adm-linechart',
