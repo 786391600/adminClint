@@ -45,7 +45,8 @@ var apiRoutes = express.Router();
 //     }
 //测试
 var options = {
-        target: 'http://117.78.45.173:18080', // target host
+        // target: 'http://117.78.45.173:18080', // target host
+        target: 'http://localhost:18080',
         // target: 'http://121.40.142.196:9003/', // target host
         changeOrigin: true,
         pathRewrite: {

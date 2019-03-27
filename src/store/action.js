@@ -32,6 +32,12 @@ const actions = {
   },
   removeMerchants (context, data) {
     return http.sendPost({action: 'merchants.removeMerchants', data: data})
+  },
+  addArticle (context, data) {
+    return http.sendPost({action: 'article.addArticle', data: data})
+  },
+  getArticleList (context, data) {
+    return http.sendPost({action: 'article.getArticleList', data: data})
   }
 };
 

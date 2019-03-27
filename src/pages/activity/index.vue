@@ -48,7 +48,6 @@
       </el-col>
     </el-row>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :append-to-body="true" @close = 'dialogClose'>
-    {{form}}
       <el-form :model="form" ref="ruleForm" :rules="formRules">
         <el-form-item label="活动名称" :label-width="formLabelWidth" prop='title'>
           <el-input v-model="form.title" type = 'title' autocomplete="off"></el-input>
@@ -80,6 +79,10 @@
             active-color="#13ce66"
             inactive-color="#ff4949">
           </el-switch>
+        </el-form-item>
+        <el-form-item label="添加文章" prop="people" :label-width="formLabelWidth">
+          <el-button>添加文章</el-button>
+          <articleSelect :isSelect = 'false' @selectClick = 'articleSelect'></articleSelect>
         </el-form-item>
         <el-form-item label="推荐权重" prop="nums" :label-width="formLabelWidth" v-if = "form.isRec">
           <el-input-number v-model="form.recNums" :min="1" :max="100" label="描述文字"></el-input-number>
@@ -118,6 +121,7 @@
   import {formatDate} from 'src/utils/utils';
   import score from 'src/components/Score/index';
   import uploadFile from 'src/components/common-components/uploadFile';
+  import articleSelect from 'src/pages/article/index'
   const POSITIVE = 0;
   const NEGATIVE = 1;
   export default {
@@ -149,7 +153,8 @@
           date: '', // 到期时间
           isRec: false,
           recNums: 1, // 活动权重
-          merchants: {}
+          merchants: {},
+          articleId: ''
         },
         formRules: {
           title: [
@@ -263,6 +268,9 @@
         this.$store.dispatch('getMerchantsList', {limit: limit, skip: skip}).then((response) => {
           that.merchantsList = response.data.list;
         })
+      },
+      articleSelect (data) {
+        this.form.articleId = data.id
       }
     },
     filters: {
@@ -279,7 +287,8 @@
     },
     components: {
       score,
-      uploadFile
+      uploadFile,
+      articleSelect
     }
   };
 </script>

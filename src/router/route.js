@@ -73,6 +73,15 @@ export const otherRouter = {
       component: () => import('src/pages/activity/index')
     },
     {
+      path: 'article',
+      name: 'article',
+      meta: {
+        title: '文章管理',
+        requireAuth: true
+      },
+      component: () => import('src/pages/article/index')
+    },
+    {
       path: 'merchants',
       name: 'merchants',
       meta: {

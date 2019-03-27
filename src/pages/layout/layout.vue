@@ -105,6 +105,11 @@
             icon: 'el-icon-adm-formsetup'
           },
           {
+            path: '/article',
+            title: '文章管理',
+            icon: 'el-icon-adm-formsetup'
+          },
+          {
             path: '/tables',
             title: '表格管理',
             icon: 'el-icon-adm-linechart',
