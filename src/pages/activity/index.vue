@@ -99,7 +99,12 @@
             </el-form-item>
           </el-col>
         </el-form-item>
-        <el-form-item label="添加图片" :label-width="formLabelWidth" prop="imgUrl" required
+        <el-form-item label="分享图片" :label-width="formLabelWidth" prop="shareImgUrl" required
+
+        >
+          <uploadFile @uploadSuccess='uploadShareSuccess' :preView = 'form.shareImgUrl'></uploadFile>
+        </el-form-item>
+        <el-form-item label="内容图片" :label-width="formLabelWidth" prop="imgUrl" required
 
         >
           <uploadFile @uploadSuccess='uploadSuccess' :preView = 'form.imgUrl'></uploadFile>
@@ -140,6 +145,7 @@
         form: {
           title: '',
           imgUrl: '',
+          shareImgUrl: '',
           describe: '', // 活动描述
           type: '',
           nums: 1, // 活动人数
@@ -161,6 +167,9 @@
             {required: true, message: '名称必填'}
           ],
           imgUrl: [
+            {required: true, message: '必须上传一张图片', trigger: 'change'}
+          ],
+          shareImgUrl: [
             {required: true, message: '必须上传一张图片', trigger: 'change'}
           ],
           describe: [
@@ -209,6 +218,9 @@
       },
       uploadSuccess (response) {
         this.form.imgUrl = response.url;
+      },
+      uploadShareSuccess (response) {
+        this.form.shareImgUrl = response.url;
       },
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
