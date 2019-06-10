@@ -38,6 +38,15 @@ const actions = {
   },
   getArticleList (context, data) {
     return http.sendPost({action: 'article.getArticleList', data: data})
+  },
+  addLineManage (context, data) {
+    return http.sendPost({action: 'line.addLineManage', data: data})
+  },
+  getLineManageList (context, data) {
+    return http.sendPost({action: 'line.getLineManageList', data: data})
+  },
+  removeLine (context, data) {
+    return http.sendPost({action: 'line.removeLine', data: data})
   }
 };
 

@@ -105,6 +105,11 @@
             icon: 'el-icon-adm-formsetup'
           },
           {
+            path: '/lineManage',
+            title: '线路管理',
+            icon: 'el-icon-adm-formsetup'
+          },
+          {
             path: '/article',
             title: '文章管理',
             icon: 'el-icon-adm-formsetup'

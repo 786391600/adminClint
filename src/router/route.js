@@ -89,6 +89,15 @@ export const otherRouter = {
         requireAuth: true
       },
       component: () => import('src/pages/merchants/index')
+    },
+    {
+      path: 'lineManage',
+      name: 'lineManage',
+      meta: {
+        title: '线路管理',
+        requireAuth: true
+      },
+      component: () => import('src/pages/lineManage/index')
     }
   ]
 };
@@ -263,3 +272,5 @@ export const routers = [
   otherRouter,
   ...appRouter
 ];
+console.log(routers)
+console.log('routers==========')
