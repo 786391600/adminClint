@@ -5,6 +5,7 @@
         <el-card>
           <div slot="header">
             <el-button type="primary" @click='dialogFormVisible = true'>添加线路</el-button>
+            <el-button type="primary" @click='dialogCity = true'>城市管理</el-button>
           </div>
           <div class="table-wrapper">
             <el-table
@@ -27,6 +28,9 @@
                    size="mini"
                    type="danger"
                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                   <el-button
+                   size="mini"
+                   @click="handleSmsNotice(scope.$index, scope.row)">短信通知</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -51,25 +55,72 @@
           <el-input v-model="form.end" type = 'end' autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="票价" :label-width="formLabelWidth" prop='price'>
-          <el-input-number :min="1" :max="300" label="票价" type='price' v-model="form.price"></el-input-number>
+          <el-input-number :min="0" :max="300" label="票价" type='price' v-model="form.price"></el-input-number>
         </el-form-item>
         <el-form-item label="数量" :label-width="formLabelWidth" prop='num'>
-          <el-input-number :min="1" :max="300" label="数量" type = 'num' v-model="form.num"></el-input-number>
+          <el-input-number :min="0" :max="300" label="数量" type = 'num' v-model="form.num"></el-input-number>
         </el-form-item>
         <el-form-item label="发车日期" required :label-width="formLabelWidth">
           <el-col :span="11">
             <el-form-item prop="departureTime">
-              <el-date-picker type="date" placeholder="选择日期" v-model="form.departureTime" style="width: 100%;" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="form.departureTime" style="width: 100%;" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="发车地点" prop="departurePlace" :label-width="formLabelWidth">
           <el-input v-model="form.departurePlace" type = 'departurePlace' autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="负责人姓名"  :label-width="formLabelWidth">
+          <el-input v-model="form.contacts_name" type = 'contacts_name' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="负责人手机"  :label-width="formLabelWidth">
+          <el-input v-model="form.contacts_phone" type = 'contacts_phone' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="车牌"  :label-width="formLabelWidth">
+          <el-input v-model="form.licensePlate" type = 'licensePlate' autocomplete="off"></el-input>
+        </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="resetForm('ruleForm')">重置</el-button>
       <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+    </div>
+  </el-dialog>
+  <el-dialog :title="'城市管理'" :visible.sync="dialogCity" :append-to-body="true" @close = 'dialogCityClose'>
+    <div class="cityBox">
+      <el-input type='textarea' v-model="cityText"></el-input>
+    </div>
+    <div>
+      <p>城市参考</p>
+      <p>[
+  {
+    "title": "推荐线路",
+    "type": "hot",
+    "item": [
+      {
+        "name": "吕梁学院",
+        "key": "热门",
+        "test": "testValue"
+      },
+      {
+        "name": "乡宁",
+        "key": "热门",
+        "test": "testValue"
+      }
+    ]
+  },
+  {
+    "title": "X",
+    "item": [
+      {
+        "name": "乡宁",
+        "key": "X"
+      }
+    ]
+  }
+]</p>
+    </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="sendCity">确 定</el-button>
     </div>
   </el-dialog>
   </div>
@@ -93,13 +144,17 @@
         currentpage: 1,
         total: 0,
         dialogFormVisible: false,
+        dialogCity: false,
         form: {
           start: '',
           end: '',
           num: 1,
           price: 1,
-          departureTime: '',
-          departurePlace: ''
+          departureTime: '',  // 出发时间
+          departurePlace: '', // 乘车地点
+          contacts_phone: '', // 负责人电话
+          contacts_name: '', // 负责人姓名
+          licensePlate: '' // 车牌
         },
         formRules: {
           start: [
@@ -118,7 +173,8 @@
             {required: true, message: '日期必填'}
           ]
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        cityText: ''
       }
     },
     methods: {
@@ -198,8 +254,30 @@
         this.dialogTitle = '更新线路'
         this.form = row
       },
+      handleSmsNotice (index, row) {
+        this.$store.dispatch('smsNotice', row).then((response) => {
+          this.$message({
+            message: '发送成功!',
+            type: 'success'
+          })
+        })
+      },
       dialogClose () {
         this.resetForm()
+      },
+      dialogCityClose () {
+        this.dialogCity = false
+      },
+      sendCity () {
+        let cityText = this.cityText.replace(/\s+/g, '')
+        let cityData = JSON.parse(cityText)
+        this.$store.dispatch('addOrUpdateCity', {data: cityData}).then((response) => {
+          this.$message({
+            message: '保存成功!',
+            type: 'success'
+          })
+          this.dialogCity = false
+        })
       }
     },
     filters: {

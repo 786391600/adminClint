@@ -47,6 +47,12 @@ const actions = {
   },
   removeLine (context, data) {
     return http.sendPost({action: 'line.removeLine', data: data})
+  },
+  smsNotice (context, data) {
+    return http.sendPost({action: 'line.smsNotice', data: data})
+  },
+  addOrUpdateCity (context, data) {
+    return http.sendPost({action: 'line.updateOrAddCity', data: data})
   }
 };
 
