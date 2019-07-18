@@ -63,7 +63,7 @@
         <el-form-item label="发车日期" required :label-width="formLabelWidth">
           <el-col :span="11">
             <el-form-item prop="departureTime">
-              <el-date-picker type="datetime" placeholder="选择日期" v-model="form.departureTime" style="width: 100%;" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="form.departureTime" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
@@ -92,31 +92,111 @@
     <div>
       <p>城市参考</p>
       <p>[
-  {
-    "title": "推荐线路",
-    "type": "hot",
-    "item": [
-      {
-        "name": "吕梁学院",
-        "key": "热门",
-        "test": "testValue"
-      },
-      {
-        "name": "乡宁",
-        "key": "热门",
-        "test": "testValue"
-      }
-    ]
-  },
-  {
-    "title": "X",
-    "item": [
-      {
-        "name": "乡宁",
-        "key": "X"
-      }
-    ]
-  }
+    {
+        "title": "推荐线路",
+        "type": "hot",
+        "item": [
+            {
+                "name": "吕梁学院",
+                "key": "热门",
+                "test": "testValue"
+            },
+            {
+                "name": "乡宁",
+                "key": "热门",
+                "test": "testValue"
+            }
+        ]
+    },
+    {
+        "title": "C",
+        "item": [
+            {
+                "name": "长治医学院",
+                "key": "C"
+            },
+            {
+                "name": "长治学院",
+                "key": "C"
+            }
+        ]
+    },
+    {
+        "title": "T",
+        "item": [
+            {
+                "name": "太原师范学院",
+                "key": "T"
+            },
+            {
+                "name": "太原理工大学",
+                "key": "T"
+            }
+        ]
+    },
+    {
+        "title": "S",
+        "item": [
+            {
+                "name": "山西交通职业技术学院",
+                "key": "S"
+            },
+            {
+                "name": "山西建筑职业技术学院",
+                "key": "S"
+            },
+            {
+                "name": "山西传媒学院",
+                "key": "S"
+            },
+            {
+                "name": "山西中医药大学",
+                "key": "S"
+            },
+            {
+                "name": "山西卫生健康职业学院",
+                "key": "S"
+            },
+            {
+                "name": "山西能源学院",
+                "key": "S"
+            },
+            {
+                "name": "山西医科大学",
+                "key": "S"
+            }
+        ]
+    },
+    {
+        "title": "J",
+        "item": [
+            {
+                "name": "吉县",
+                "key": "J"
+            },
+            {
+                "name": "晋中学院",
+                "key": "J"
+            },
+            {
+                "name": "晋中师范",
+                "key": "J"
+            },
+            {
+                "name": "晋中职业技术学院",
+                "key": "J"
+            }
+        ]
+    },
+    {
+        "title": "X",
+        "item": [
+            {
+                "name": "乡宁",
+                "key": "X"
+            }
+        ]
+    }
 ]</p>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -146,14 +226,14 @@
         dialogFormVisible: false,
         dialogCity: false,
         form: {
-          start: '',
+          start: '吉县',
           end: '',
-          num: 1,
-          price: 1,
-          departureTime: '',  // 出发时间
-          departurePlace: '', // 乘车地点
-          contacts_phone: '', // 负责人电话
-          contacts_name: '', // 负责人姓名
+          num: 10,
+          price: 0.2,
+          departureTime: '2019-07-20 17:15:43',  // 出发时间
+          departurePlace: '吉县', // 乘车地点
+          contacts_phone: '15735801586', // 负责人电话
+          contacts_name: '潘政伟', // 负责人姓名
           licensePlate: '' // 车牌
         },
         formRules: {
@@ -227,12 +307,15 @@
       },
       resetForm() {
         this.form = {
-          start: '',
+          start: '吉县',
           end: '',
-          num: 1,
-          price: 1,
-          departureTime: '',
-          departurePlace: ''
+          num: 10,
+          price: 0.2,
+          departureTime: '2019-07-20 17:15:43',
+          departurePlace: '吉县',
+          contacts_phone: '15735801586', // 负责人电话
+          contacts_name: '潘政伟', // 负责人姓名
+          licensePlate: '' // 车牌
         }
         this.dialogFormVisible = false
       },
