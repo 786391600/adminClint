@@ -18,6 +18,7 @@
               <el-table-column label="终点" prop="end" align="center" header-align="center"></el-table-column>
               <el-table-column label="票价" prop="price" align="center" header-align="center"></el-table-column>
               <el-table-column label="数量" prop="num" align="center" header-align="center"></el-table-column>
+              <el-table-column label="是否完成" :formatter = 'completeFormatter' prop="complete" align="center" header-align="center"></el-table-column>
               <el-table-column label="发车日期" prop="departureTime" align="center" header-align="center"></el-table-column>
               <el-table-column label="操作" header-align="center" align="center">
                 <template slot-scope="scope">
@@ -31,6 +32,9 @@
                    <el-button
                    size="mini"
                    @click="handleSmsNotice(scope.$index, scope.row)">短信通知</el-button>
+                    <el-button
+                   size="mini"
+                   @click="handleShowOrderList(scope.$index, scope.row)">查看订单</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -79,12 +83,15 @@
         <el-form-item label="车牌"  :label-width="formLabelWidth">
           <el-input v-model="form.licensePlate" type = 'licensePlate' autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="是否完成" :label-width="formLabelWidth">
+          <el-switch v-model="form.complete"></el-switch>
+        </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="resetForm('ruleForm')">重置</el-button>
       <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
     </div>
-  </el-dialog>
+   </el-dialog>
   <el-dialog :title="'城市管理'" :visible.sync="dialogCity" :append-to-body="true" @close = 'dialogCityClose'>
     <div class="cityBox">
       <el-input type='textarea' v-model="cityText"></el-input>
@@ -203,12 +210,16 @@
       <el-button type="primary" @click="sendCity">确 定</el-button>
     </div>
   </el-dialog>
+  <el-dialog :title="'订单管理'" :visible.sync="dialogOrderList" :append-to-body="true" @close = 'dialogClose'>
+    <orderList></orderList>
+   </el-dialog>
   </div>
 </template>
 <script>
   import {formatDate} from 'src/utils/utils';
   import score from 'src/components/Score/index';
   import uploadFile from 'src/components/common-components/uploadFile';
+  import orderList from './orderList'
   const POSITIVE = 0;
   const NEGATIVE = 1;
   export default {
@@ -228,13 +239,14 @@
         form: {
           start: '吉县',
           end: '',
-          num: 10,
-          price: 0.2,
-          departureTime: '2019-07-20 17:15:43',  // 出发时间
-          departurePlace: '吉县', // 乘车地点
+          num: 45,
+          price: 105,
+          departureTime: '2019-08-24 08:50:00',  // 出发时间
+          departurePlace: '', // 乘车地点
           contacts_phone: '15735801586', // 负责人电话
           contacts_name: '潘政伟', // 负责人姓名
-          licensePlate: '' // 车牌
+          licensePlate: '', // 车牌
+          complete: false // 是否完成
         },
         formRules: {
           start: [
@@ -254,7 +266,8 @@
           ]
         },
         formLabelWidth: '120px',
-        cityText: ''
+        cityText: '',
+        dialogOrderList: false
       }
     },
     methods: {
@@ -309,13 +322,14 @@
         this.form = {
           start: '吉县',
           end: '',
-          num: 10,
-          price: 0.2,
-          departureTime: '2019-07-20 17:15:43',
-          departurePlace: '吉县',
+          num: 45,
+          price: 105,
+          departureTime: '2019-08-24 08:50:00',
+          departurePlace: '',
           contacts_phone: '15735801586', // 负责人电话
           contacts_name: '潘政伟', // 负责人姓名
-          licensePlate: '' // 车牌
+          licensePlate: '', // 车牌
+          complete: false
         }
         this.dialogFormVisible = false
       },
@@ -361,6 +375,12 @@
           })
           this.dialogCity = false
         })
+      },
+      handleShowOrderList (index, row) {
+        this.dialogOrderList = true
+      },
+      completeFormatter(row, column) {
+        return row.complete ? '完成' : '未完成'
       }
     },
     filters: {
@@ -374,7 +394,8 @@
     },
     components: {
       score,
-      uploadFile
+      uploadFile,
+      orderList
     }
   };
 </script>
