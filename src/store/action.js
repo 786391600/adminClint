@@ -53,6 +53,15 @@ const actions = {
   },
   addOrUpdateCity (context, data) {
     return http.sendPost({action: 'line.updateOrAddCity', data: data})
+  },
+  addOrUpdateFleet (context, data) {
+    return http.sendPost({action: 'fleet.addOrUpdateFleet', data: data})
+  },
+  getFleetList (context, data) {
+    return http.sendPost({action: 'fleet.getFleetList', data: data})
+  },
+  removeFleet (context, data) {
+    return http.sendPost({action: 'fleet.removeFleet', data: data})
   }
 };
 

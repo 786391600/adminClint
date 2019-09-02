@@ -98,6 +98,15 @@ export const otherRouter = {
         requireAuth: true
       },
       component: () => import('src/pages/lineManage/index')
+    },
+    {
+      path: 'fleet',
+      name: 'fleet',
+      meta: {
+        title: '车队管理',
+        requireAuth: true
+      },
+      component: () => import('src/pages/fleet/index')
     }
   ]
 };

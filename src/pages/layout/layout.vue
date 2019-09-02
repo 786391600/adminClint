@@ -35,7 +35,7 @@
       <div class="menu-collapse-wrapper float-left" @click="toggleMenu">
         <i class="el-icon-adm-menu" :style="{transform: 'rotateZ(' + (this.isCollapsed ? '90' : '0') + 'deg)'}"></i>
       </div>
-      <div class="title float-left">VUE-ADMIN 后台管理系统</div>
+      <div class="title float-left">么么校园 后台管理系统</div>
       <ul class="menu-list float-right">
         <li v-if="user" class="menu-item" style="padding: 0;">
           <el-dropdown
@@ -107,6 +107,11 @@
           {
             path: '/lineManage',
             title: '线路管理',
+            icon: 'el-icon-adm-formsetup'
+          },
+          {
+            path: '/fleet',
+            title: '车队管理',
             icon: 'el-icon-adm-formsetup'
           },
           {
