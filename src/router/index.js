@@ -37,7 +37,6 @@ router.beforeEach((to, form, next) => {
   
   // 设置window.document.title 的名称
   setTitle(to.meta.title);
-  
   if (!to.matched.length) {
     next({
       path: '/error/404',

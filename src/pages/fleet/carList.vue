@@ -4,8 +4,7 @@
       <el-col :span='24'>
         <el-card>
           <div slot="header">
-            <el-button type="primary" @click='dialogFormVisible = true'>添加车队</el-button>
-            <el-button type="primary" @click='dialogCity = true'>城市管理</el-button>
+            <el-button type="primary" @click='dialogFormVisible = true'>添加车辆</el-button>
           </div>
           <div class="table-wrapper">
             <el-table
@@ -13,20 +12,25 @@
               element-loading-text="加载数据中"
               :data='tableData'
               border
+              width='100%'
               :row-class-name="addRowClass">
-              <el-table-column label="车队名称" prop="name" align="center"></el-table-column>
-              <el-table-column label="操作" header-align="center" align="center">
+             <el-table-column label="票价" prop="price" align="center" header-align="center"></el-table-column>
+              <el-table-column label="数量" prop="num" align="center" header-align="center"></el-table-column>
+               <el-table-column label="负责人" prop="contacts_name" align="center" header-align="center"></el-table-column>
+              <el-table-column label="乘车地点" prop="departurePlace" align="center" header-align="center"></el-table-column>
+              <el-table-column label="电话" prop="contacts_phone" align="center" header-align="center"></el-table-column>
+              <el-table-column label="车牌" prop="licensePlate" align="center" header-align="center"></el-table-column>
+              <el-table-column label="是否完成" :formatter = 'completeFormatter' prop="complete" align="center" header-align="center"></el-table-column>
+              <el-table-column label="发车日期" prop="departureTime" align="center" header-align="center"></el-table-column>
+              <el-table-column label="操作" header-align="center" align="center" fixed>
                 <template slot-scope="scope">
                  <el-button
                    size="mini"
                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                   <el-button
-                   size="mini"
-                   @click="handleAddCar(scope.$index, scope.row)">查看车辆</el-button>
-                 <!-- <el-button
+                 <el-button
                    size="mini"
                    type="danger"
-                   @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                   @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -44,8 +48,30 @@
     </el-row>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :append-to-body="true" @close = 'dialogClose'>
       <el-form :model="form" ref="ruleForm" :rules="formRules">
-        <el-form-item label="车队名称" :label-width="formLabelWidth" prop='name'>
-          <el-input v-model="form.name" type = 'title' autocomplete="off"></el-input>
+        <el-form-item label="数量" :label-width="formLabelWidth" prop='num'>
+          <el-input-number :min="0" :max="300" label="数量" type = 'num' v-model="form.num"></el-input-number>
+        </el-form-item>
+        <el-form-item label="发车日期" required :label-width="formLabelWidth">
+          <el-col :span="11">
+            <el-form-item prop="departureTime">
+              <el-date-picker type="datetime" placeholder="选择日期" v-model="form.departureTime" style="width: 100%;" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="发车地点" prop="departurePlace" :label-width="formLabelWidth">
+          <el-input v-model="form.departurePlace" type = 'departurePlace' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="负责人姓名"  :label-width="formLabelWidth">
+          <el-input v-model="form.contacts_name" type = 'contacts_name' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="负责人手机"  :label-width="formLabelWidth">
+          <el-input v-model="form.contacts_phone" type = 'contacts_phone' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="车牌"  :label-width="formLabelWidth">
+          <el-input v-model="form.licensePlate" type = 'licensePlate' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="是否完成" :label-width="formLabelWidth">
+          <el-switch v-model="form.complete"></el-switch>
         </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -53,30 +79,26 @@
       <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
     </div>
    </el-dialog>
-   <el-drawer
-  title="车辆管理"
-  :visible="carDrawer"
-  direction="rtl"
-  @close='drawerClose'
-  size="50%">
-   <car :fleetInfo='fleetInfo'></car>
-  </el-drawer>
   </div>
 </template>
 <script>
   import {formatDate} from 'src/utils/utils';
   import score from 'src/components/Score/index';
   import uploadFile from 'src/components/common-components/uploadFile';
-  import car from './carList'
   const POSITIVE = 0;
   const NEGATIVE = 1;
   export default {
+    props: {
+      fleetInfo: {
+        default: {}
+      }
+    },
     created () {
       this.getTableData();
     },
     data () {
       return {
-        dialogTitle: '添加车队',
+        dialogTitle: '添加车辆',
         tableData: [],
         loading: false,
         pagesize: 10,
@@ -85,7 +107,14 @@
         dialogFormVisible: false,
         dialogCity: false,
         form: {
-          name: ''
+          num: 0,
+          price: 100,
+          departureTime: '',  // 出发时间
+          departurePlace: '', // 乘车地点
+          contacts_phone: '13934691550', // 负责人电话
+          contacts_name: '王涛', // 负责人姓名
+          licensePlate: '', // 车牌
+          complete: false // 是否完成
         },
         formRules: {
           name: [
@@ -107,8 +136,7 @@
         formLabelWidth: '120px',
         cityText: '',
         dialogOrderList: false,
-        carDrawer: false,
-        fleetInfo: {}
+        fleetId: ''
       }
     },
     methods: {
@@ -116,7 +144,7 @@
         let limit = this.pagesize;
         let skip = (this.currentpage - 1) * limit;
         this.loading = true
-        this.$store.dispatch('getFleetList', {limit: limit, skip: skip}).then((response) => {
+        this.$store.dispatch('getCarList', {fleetId: this.fleetId, limit: limit, skip: skip}).then((response) => {
           this.tableData = response.data.list
           this.total = response.data.count
           this.loading = false
@@ -141,16 +169,16 @@
       uploadSuccess (response) {
         this.form.imgUrl = response.url;
       },
-      submitForm (formName) {
-        console.log(this.form)
+      submitForm (formName) { 
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$store.dispatch('addOrUpdateFleet', this.form).then((data) => {
+            this.form.fleetId = this.fleetId  
+            this.$store.dispatch('addOrUpdateCar', this.form).then((data) => {
               this.$message({
                 message: this.dialogTitle + '成功!',
                 type: 'success'
               })
-              this.dialogTitle = '车队创建'
+              this.dialogTitle = '添加车辆'
               this.resetForm('ruleForm')
               this.getTableData()
             })
@@ -161,7 +189,14 @@
       },
       resetForm() {
         this.form = {
-          name: ''
+          num: 0,
+          price: 100,
+          departureTime: '',  // 出发时间
+          departurePlace: '', // 乘车地点
+          contacts_phone: '13934691550', // 负责人电话
+          contacts_name: '王涛', // 负责人姓名
+          licensePlate: '', // 车牌
+          complete: false // 是否完成
         }
         this.dialogFormVisible = false
       },
@@ -169,7 +204,7 @@
         console.log(val)
       },
       handleDelete (index, row) {
-        this.$store.dispatch('removeFleet', row).then((response) => {
+        this.$store.dispatch('removeCar', row).then((response) => {
           this.$message({
             message: '删除成功!',
             type: 'success'
@@ -213,13 +248,6 @@
       },
       completeFormatter(row, column) {
         return row.complete ? '完成' : '未完成'
-      },
-      handleAddCar (index, row) {
-        this.carDrawer = true
-        this.fleetInfo = row
-      },
-      drawerClose () {
-        this.carDrawer = false
       }
     },
     filters: {
@@ -233,8 +261,14 @@
     },
     components: {
       score,
-      uploadFile,
-      car
+      uploadFile
+    },
+    watch: {
+      fleetInfo (data) {
+        this.fleetId = data.id;  
+        this.currentpage = 1;
+        this.getTableData()
+      }
     }
   };
 </script>

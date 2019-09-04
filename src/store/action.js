@@ -62,6 +62,15 @@ const actions = {
   },
   removeFleet (context, data) {
     return http.sendPost({action: 'fleet.removeFleet', data: data})
+  },
+  getCarList (context, data) {
+    return http.sendPost({action: 'fleet.getCarList', data: data})
+  },
+  addOrUpdateCar (context, data) {
+    return http.sendPost({action: 'fleet.addOrUpdateCar', data: data})
+  },
+  removeCar (context, data) {
+    return http.sendPost({action: 'fleet.removeCar', data: data})
   }
 };
 
