@@ -94,6 +94,7 @@
       }
     },
     created () {
+      this.fleetId = this.fleetInfo.id;
       this.getTableData();
     },
     data () {
@@ -108,7 +109,6 @@
         dialogCity: false,
         form: {
           num: 0,
-          price: 100,
           departureTime: '',  // 出发时间
           departurePlace: '', // 乘车地点
           contacts_phone: '13934691550', // 负责人电话
