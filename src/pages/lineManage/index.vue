@@ -6,20 +6,24 @@
           <div slot="header">
             <el-button type="primary" @click='dialogFormVisible = true'>添加线路</el-button>
             <el-button type="primary" @click='dialogCity = true'>城市管理</el-button>
+            <el-button type="primary" @click='updateFleet = true'>分配车队</el-button>
           </div>
           <div class="table-wrapper">
             <el-table
               v-loading="loading"
               element-loading-text="加载数据中"
               :data='tableData'
-              border
+              @selection-change="handleSelectionChange"
               :row-class-name="addRowClass">
+              <el-table-column type="selection" align="center"></el-table-column>
               <el-table-column label="起点" prop="start" align="center"></el-table-column>
               <el-table-column label="终点" prop="end" align="center" header-align="center"></el-table-column>
               <el-table-column label="票价" prop="price" align="center" header-align="center"></el-table-column>
-              <el-table-column label="数量" prop="num" align="center" header-align="center"></el-table-column>
-              <el-table-column label="是否完成" :formatter = 'completeFormatter' prop="complete" align="center" header-align="center"></el-table-column>
-              <el-table-column label="发车日期" prop="departureTime" align="center" header-align="center"></el-table-column>
+               <el-table-column label="所属车队" align="center" header-align="center">
+                <template slot-scope="scope">
+                  {{scope.row.fleet_info[0] ? scope.row.fleet_info[0].name : '未分配'}}
+                </template>
+               </el-table-column>
               <el-table-column label="操作" header-align="center" align="center">
                 <template slot-scope="scope">
                  <el-button
@@ -60,9 +64,6 @@
         </el-form-item>
         <el-form-item label="票价" :label-width="formLabelWidth" prop='price'>
           <el-input-number :min="0" :max="300" label="票价" type='price' v-model="form.price"></el-input-number>
-        </el-form-item>
-        <el-form-item label="数量" :label-width="formLabelWidth" prop='num'>
-          <el-input-number :min="0" :max="300" label="数量" type = 'num' v-model="form.num"></el-input-number>
         </el-form-item>
         <el-form-item label="发车日期" required :label-width="formLabelWidth">
           <el-col :span="11">
@@ -213,6 +214,9 @@
   <el-dialog :title="'订单管理'" :visible.sync="dialogOrderList" :append-to-body="true" @close = 'dialogClose'>
     <orderList></orderList>
    </el-dialog>
+   <el-dialog :title="'车队选择'" :visible.sync="updateFleet" :append-to-body="true" @close = 'dialogClose'>
+    <fleetSelect :lineSelectList = 'lineSelectList' @update = 'fleetUpdate'></fleetSelect>
+   </el-dialog>
   </div>
 </template>
 <script>
@@ -220,6 +224,7 @@
   import score from 'src/components/Score/index';
   import uploadFile from 'src/components/common-components/uploadFile';
   import orderList from './orderList'
+  import fleetSelect from './fleetSelect'
   const POSITIVE = 0;
   const NEGATIVE = 1;
   export default {
@@ -236,10 +241,10 @@
         total: 0,
         dialogFormVisible: false,
         dialogCity: false,
+        updateFleet: false,
         form: {
           start: '吉县',
           end: '',
-          num: 45,
           price: 105,
           departureTime: '2019-08-24 08:50:00',  // 出发时间
           departurePlace: '', // 乘车地点
@@ -267,7 +272,8 @@
         },
         formLabelWidth: '120px',
         cityText: '',
-        dialogOrderList: false
+        dialogOrderList: false,
+        lineSelectList: []
       }
     },
     methods: {
@@ -322,7 +328,6 @@
         this.form = {
           start: '吉县',
           end: '',
-          num: 45,
           price: 105,
           departureTime: '2019-08-24 08:50:00',
           departurePlace: '',
@@ -334,7 +339,11 @@
         this.dialogFormVisible = false
       },
       handleSelectionChange (val) {
-        console.log(val)
+        let newArr = []
+        val.forEach(element => {
+          newArr.push(element.id)
+        })
+        this.lineSelectList = newArr
       },
       handleDelete (index, row) {
         this.$store.dispatch('removeLine', row).then((response) => {
@@ -381,6 +390,9 @@
       },
       completeFormatter(row, column) {
         return row.complete ? '完成' : '未完成'
+      },
+      fleetUpdate () {
+        this.getTableData()
       }
     },
     filters: {
@@ -395,7 +407,8 @@
     components: {
       score,
       uploadFile,
-      orderList
+      orderList,
+      fleetSelect
     }
   };
 </script>

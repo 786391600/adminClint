@@ -71,6 +71,9 @@ const actions = {
   },
   removeCar (context, data) {
     return http.sendPost({action: 'fleet.removeCar', data: data})
+  },
+  distributionFleet (context, data) {
+    return http.sendPost({action: 'fleet.distributionFleet', data: data})
   }
 };
 

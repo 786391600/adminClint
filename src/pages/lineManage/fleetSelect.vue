@@ -3,31 +3,27 @@
     <el-row>
       <el-col :span='24'>
         <el-card>
-          <div slot="header">
-            <el-button type="primary" @click='dialogFormVisible = true'>添加车队</el-button>
-          </div>
           <div class="table-wrapper">
+            {{lineSelectList}}
             <el-table
               v-loading="loading"
               element-loading-text="加载数据中"
               :data='tableData'
               border
-              :row-class-name="addRowClass">
+              @row-click = 'fleetSelectClick'
+              >
               <el-table-column label="车队名称" prop="name" align="center"></el-table-column>
-              <el-table-column label="操作" header-align="center" align="center">
+              <!-- <el-table-column label="操作" header-align="center" align="center">
                 <template slot-scope="scope">
                  <el-button
                    size="mini"
                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                   <el-button
-                   size="mini"
-                   @click="handleAddCar(scope.$index, scope.row)">查看车辆</el-button>
-                 <!-- <el-button
+                 <el-button
                    size="mini"
                    type="danger"
-                   @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                   @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
             </el-table>
             <el-pagination
               style="margin-top: 16px; text-align:right;"
@@ -52,24 +48,16 @@
       <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
     </div>
    </el-dialog>
-   <el-drawer
-  title="车辆管理"
-  :visible="carDrawer"
-  direction="rtl"
-  @close='drawerClose'
-  size="50%">
-   <car :fleetInfo='fleetInfo'></car>
-  </el-drawer>
   </div>
 </template>
 <script>
   import {formatDate} from 'src/utils/utils';
-  import score from 'src/components/Score/index';
-  import uploadFile from 'src/components/common-components/uploadFile';
-  import car from './carList'
-  const POSITIVE = 0;
-  const NEGATIVE = 1;
   export default {
+    props: {
+      lineSelectList: {
+        default: []
+      }
+    },
     created () {
       this.getTableData();
     },
@@ -132,41 +120,6 @@
         this.currentpage = value;
         this.getTableData();
       },
-      addRowClass ({row, rowIndex}) {
-        if (row.rateType === NEGATIVE) {
-          return 'warning-row';
-        }
-      },
-      uploadSuccess (response) {
-        this.form.imgUrl = response.url;
-      },
-      submitForm (formName) {
-        console.log(this.form)
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch('addOrUpdateFleet', this.form).then((data) => {
-              this.$message({
-                message: this.dialogTitle + '成功!',
-                type: 'success'
-              })
-              this.dialogTitle = '车队创建'
-              this.resetForm('ruleForm')
-              this.getTableData()
-            })
-          } else {
-            return false;
-          }
-        })
-      },
-      resetForm() {
-        this.form = {
-          name: ''
-        }
-        this.dialogFormVisible = false
-      },
-      handleSelectionChange (val) {
-        console.log(val)
-      },
       handleDelete (index, row) {
         this.$store.dispatch('removeFleet', row).then((response) => {
           this.$message({
@@ -182,12 +135,19 @@
         this.dialogTitle = '更新车队'
         this.form = row
       },
-      handleSmsNotice (index, row) {
-        this.$store.dispatch('smsNotice', row).then((response) => {
+      fleetSelectClick (row) {
+        if (this.lineSelectList.length <= 0) {
           this.$message({
-            message: '发送成功!',
-            type: 'success'
+            message: '请选择要分配的线路',
+            type: 'warning'
           })
+          return
+        }  
+        this.$alert('线路将分配到【' + row.name + '】车队', '确认分配', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.distributionFleet(row.id, this.lineSelectList)
+          }
         })
       },
       dialogClose () {
@@ -219,22 +179,32 @@
       },
       drawerClose () {
         this.carDrawer = false
+      },
+      distributionFleet (fleetId, lineList) {
+        let query = {fleetId: fleetId, lineList: lineList}  
+        this.$store.dispatch('distributionFleet', query).then((data) => {
+          if (data.success) {
+            this.$message({
+              message: '分配成功!',
+              type: 'success'
+            })
+            this.$emit('update', true)
+          } else {
+            this.$message({
+              message: '分配失败!',
+              type: 'error'
+            }) 
+          }
+        })
       }
     },
     filters: {
-      rateTypeToText (rateType) {
-        return rateType === POSITIVE ? '满意' : '不满意';
-      },
       formatDate (time) {
         let date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss');
       }
     },
-    components: {
-      score,
-      uploadFile,
-      car
-    }
+    components: {}
   };
 </script>
 <style lang='scss'>
