@@ -79,7 +79,7 @@
         console.log(fileName)
         const extension = fileName[fileName.length - 1] === 'jpg'
         // const extension2 = fileName[fileName.length - 1] === 'png'
-        const isLt2M = file.size / 1024 < 500
+        const isLt2M = file.size / 1024 < 1000
         if (!extension) {
           this.$message({
             message: '上传图片只能是jpg格式!',

@@ -108,11 +108,11 @@
         dialogFormVisible: false,
         dialogCity: false,
         form: {
-          num: 0,
-          departureTime: '',  // 出发时间
-          departurePlace: '', // 乘车地点
-          contacts_phone: '13934691550', // 负责人电话
-          contacts_name: '王涛', // 负责人姓名
+          num: 30,
+          departureTime: '2019-10-07 09:00:00',  // 出发时间
+          departurePlace: '公众号通知', // 乘车地点
+          contacts_phone: '15735801586', // 负责人电话
+          contacts_name: '潘政伟', // 负责人姓名
           licensePlate: '', // 车牌
           complete: false // 是否完成
         },
@@ -189,12 +189,11 @@
       },
       resetForm() {
         this.form = {
-          num: 0,
-          price: 100,
-          departureTime: '',  // 出发时间
-          departurePlace: '', // 乘车地点
-          contacts_phone: '13934691550', // 负责人电话
-          contacts_name: '王涛', // 负责人姓名
+          num: 30,
+          departureTime: '2019-10-07 09:00:00',  // 出发时间
+          departurePlace: '公众号通知', // 乘车地点
+          contacts_phone: '15735801586', // 负责人电话
+          contacts_name: '潘政伟', // 负责人姓名
           licensePlate: '', // 车牌
           complete: false // 是否完成
         }
