@@ -22,6 +22,9 @@
                    <el-button
                    size="mini"
                    @click="handleAddCar(scope.$index, scope.row)">查看车辆</el-button>
+                   <el-button
+                   size="mini"
+                   @click="handleAddUser(scope.$index, scope.row)">添加权限</el-button>
                  <!-- <el-button
                    size="mini"
                    type="danger"
@@ -60,6 +63,14 @@
   size="50%">
    <car :fleetInfo='fleetInfo'></car>
   </el-drawer>
+   <el-drawer
+  title="设置用户"
+  :visible="authority"
+  direction="rtl"
+  @close='drawerClose'
+  size="50%">
+    <userList :isUpdate='authority' :fleetInfo='fleetInfo'></userList>
+  </el-drawer>
   </div>
 </template>
 <script>
@@ -67,6 +78,7 @@
   import score from 'src/components/Score/index';
   import uploadFile from 'src/components/common-components/uploadFile';
   import car from './carList'
+  import userList from './userList'
   const POSITIVE = 0;
   const NEGATIVE = 1;
   export default {
@@ -107,6 +119,7 @@
         cityText: '',
         dialogOrderList: false,
         carDrawer: false,
+        authority: false,
         fleetInfo: {}
       }
     },
@@ -217,8 +230,14 @@
         this.carDrawer = true
         this.fleetInfo = row
       },
+      handleAddUser (index, row) {
+        this.authority = true
+        this.fleetInfo = row
+      },
       drawerClose () {
         this.carDrawer = false
+        this.authority = false
+        this.getTableData()
       }
     },
     filters: {
@@ -233,7 +252,8 @@
     components: {
       score,
       uploadFile,
-      car
+      car,
+      userList
     }
   };
 </script>

@@ -20,8 +20,23 @@
                 width="55" align='center'>
               </el-table-column>-->
               <el-table-column label="文章名称" prop="name" align="center"></el-table-column>
-              <el-table-column label="文章代码" align="center" prop="code" :show-overflow-tooltip="true">
+              <el-table-column label="图片链接" align="center" prop="imgUrl" :show-overflow-tooltip="true">
+              </el-table-column>
+              <el-table-column label="文章链接" align="center" prop="articleUrl" :show-overflow-tooltip="true">
                 
+              </el-table-column>
+              <el-table-column label="文章类型" align="center" prop="type" :show-overflow-tooltip="true">
+                <template slot-scope="scope">
+                   <span v-if="scope.row.type === 'booking'">订票业务</span>
+                   <span v-else-if="scope.row.type === 'job'">兼职业务</span>
+                   <span v-else>全平台</span>
+                 </template>
+              </el-table-column>
+              <el-table-column label="优先级" align="center" prop="priority" :show-overflow-tooltip="true">
+                
+              </el-table-column>
+              <el-table-column label="文章代码" align="center" prop="code" :show-overflow-tooltip="true">
+                 
               </el-table-column>
               <el-table-column label="操作" header-align="center" align="center" v-if="isSelect">
                 <template slot-scope="scope">
@@ -52,9 +67,25 @@
         <el-form-item label="文章名称" :label-width="formLabelWidth" prop='name'>
           <el-input v-model="form.name" type = 'name' autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="添加代码"  :label-width="formLabelWidth" prop="code" required>
+        <el-form-item label="文章链接"  :label-width="formLabelWidth">
+          <el-input v-model="form.articleUrl" type = 'textarea' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="图片链接"  :label-width="formLabelWidth" prop="imgUrl">
+          <el-input v-model="form.imgUrl" type = 'textarea' autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="优先级"  :label-width="formLabelWidth" prop="priority">
+          <el-input-number v-model="form.priority" :min="0" :max="99" label="优先级"></el-input-number>
+        </el-form-item>
+        <el-form-item label="添加代码"  :label-width="formLabelWidth">
           <el-input v-model="form.code" type = 'textarea' autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="文章类型" :label-width="formLabelWidth">
+        <el-radio-group v-model="form.type">
+          <el-radio label="all">全平台</el-radio>
+          <el-radio label="booking">车票</el-radio>
+          <el-radio label="job">工作</el-radio>
+        </el-radio-group>
+  </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -89,14 +120,20 @@
         dialogFormVisible: false,
         form: {
           name: '',
-          code: ''
+          code: '',
+          articleUrl: '',
+          imgUrl: '',
+          priority: 0
         },
         formRules: {
           name: [
             {required: true, message: '名称必填'}
           ],
           code: [
-            {required: true, message: '必须编辑代码', trigger: 'change'}
+            {message: '必须编辑代码', trigger: 'change'}
+          ],
+          imgUrl: [
+            {resuired: true, message: '图片链接必填'}
           ]
         },
         formLabelWidth: '120px'

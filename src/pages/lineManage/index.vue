@@ -7,6 +7,25 @@
             <el-button type="primary" @click='dialogFormVisible = true'>添加线路</el-button>
             <el-button type="primary" @click='dialogCity = true'>城市管理</el-button>
             <el-button type="primary" @click='updateFleet = true'>分配车队</el-button>
+            <el-popover
+              placement="right"
+              width="400"
+              @hide = 'searchPoverHide'
+              trigger="click">
+               <el-form ref="form" :model="queryCriteria" label-width="80px">
+                  <el-form-item label="起点">
+                    <el-input v-model="queryCriteria.start"></el-input>
+                  </el-form-item>
+                  <el-form-item label="终点">
+                    <el-input v-model="queryCriteria.end"></el-input>
+                  </el-form-item>
+                  <el-form-item label="是否停用">
+                    <el-switch v-model="queryCriteria.isStop">
+                    </el-switch>
+                  </el-form-item>
+                </el-form>
+              <el-button type='primary' slot="reference">查询条件</el-button>
+            </el-popover>
           </div>
           <div class="table-wrapper">
             <el-table
@@ -19,6 +38,11 @@
               <el-table-column label="起点" prop="start" align="center"></el-table-column>
               <el-table-column label="终点" prop="end" align="center" header-align="center"></el-table-column>
               <el-table-column label="票价" prop="price" align="center" header-align="center"></el-table-column>
+              <el-table-column label="是否停用" prop="isStop" align="center" header-align="center">
+                <template slot-scope="scope">
+                  <span v-if='scope.row.isStop' style="color: red">已停用</span><span v-else>在运营</span>
+                </template>
+              </el-table-column>
                <el-table-column label="所属车队" align="center" header-align="center">
                 <template slot-scope="scope">
                   {{scope.row.fleet_info[0] ? scope.row.fleet_info[0].name : '未分配'}}
@@ -33,12 +57,6 @@
                    size="mini"
                    type="danger"
                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                   <el-button
-                   size="mini"
-                   @click="handleSmsNotice(scope.$index, scope.row)">短信通知</el-button>
-                    <el-button
-                   size="mini"
-                   @click="handleShowOrderList(scope.$index, scope.row)">查看订单</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -86,6 +104,9 @@
         </el-form-item>
         <el-form-item label="是否完成" :label-width="formLabelWidth">
           <el-switch v-model="form.complete"></el-switch>
+        </el-form-item>
+         <el-form-item label="是否停用" :label-width="formLabelWidth">
+          <el-switch v-model="form.isStop"></el-switch>
         </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -251,7 +272,8 @@
           contacts_phone: '15735801586', // 负责人电话
           contacts_name: '潘政伟', // 负责人姓名
           licensePlate: '', // 车牌
-          complete: false // 是否完成
+          complete: false, // 是否完成
+          isStop: false // 是否停用
         },
         formRules: {
           start: [
@@ -273,22 +295,34 @@
         formLabelWidth: '120px',
         cityText: '',
         dialogOrderList: false,
-        lineSelectList: []
+        lineSelectList: [],
+        queryCriteria: {
+          start: '',
+          end: '',
+          isStop: false
+        }
       }
     },
     methods: {
       getTableData () {
+        let query = this.getSearchQuery()
         let limit = this.pagesize;
         let skip = (this.currentpage - 1) * limit;
         this.loading = true
-        this.$store.dispatch('getLineManageList', {limit: limit, skip: skip}).then((response) => {
+        this.$store.dispatch('getLineManageList', {limit: limit, skip: skip, query: query}).then((response) => {
           this.tableData = response.data.list
           this.total = response.data.count
           this.loading = false
         })
       },
-      show (scope) {
-        console.log(scope);
+      getSearchQuery () {
+        let query = {}
+        for (var k in this.queryCriteria) {
+          if (this.queryCriteria[k] || k === 'isStop') {
+            query[k] = this.queryCriteria[k]
+          }
+        }
+        return query
       },
       handleSizeChange (value) {
         this.pagesize = value;
@@ -393,6 +427,13 @@
       },
       fleetUpdate () {
         this.getTableData()
+      },
+      searchPoverHide () {
+        let query = this.getSearchQuery()
+        if (query) {
+          this.currentpage = 1
+          this.getTableData()
+        }
       }
     },
     filters: {

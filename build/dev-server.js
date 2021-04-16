@@ -46,7 +46,8 @@ var apiRoutes = express.Router();
 //测试
 var options = {
         // target: 'http://117.78.45.173:18080', // target host
-        target: 'http://localhost:18080',
+        target: 'http://localhost:18088',
+        // target: 'https://www.beijixiong.club',
         // target: 'http://121.40.142.196:9003/', // target host
         changeOrigin: true,
         pathRewrite: {
@@ -56,7 +57,7 @@ var options = {
     }
 var exampleProxy = proxyMiddleware(options);
 var uploadProxy = proxyMiddleware({
-  target: 'http://117.78.45.173:4869',
+  target: 'http://img.beijixiong.club/:4869',
   changeOrigin: true,
         pathRewrite: {
            '^/api/upload' : '/upload'           // 同上

@@ -102,7 +102,7 @@
         dialogTitle: '添加车辆',
         tableData: [],
         loading: false,
-        pagesize: 10,
+        pagesize: 5,
         currentpage: 1,
         total: 0,
         dialogFormVisible: false,

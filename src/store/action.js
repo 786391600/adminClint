@@ -74,6 +74,9 @@ const actions = {
   },
   distributionFleet (context, data) {
     return http.sendPost({action: 'fleet.distributionFleet', data: data})
+  },
+  fleetAddorUpdateUser (context, data) {
+    return http.sendPost({action: 'fleet.fleetAddorUpdateUser', data: data})
   }
 };
 
